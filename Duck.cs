@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Duck_Hunt_1._1
 {
-    class Duck
+     class Duck
     {
         public Rectangle duck;
         Random random = new Random();
@@ -65,6 +65,23 @@ namespace Duck_Hunt_1._1
             {
                 movingUp = false;
             }
+            //sends a change direction command
+            if (movingLeft == false & movingUp == true)
+            {
+                ChangeDirection(0);
+            }
+            else if (movingLeft == true & movingUp == true)
+            {
+                ChangeDirection(1);
+            }
+            else if (movingLeft == false & movingUp == false)
+            {
+                ChangeDirection(2);
+            }
+            else if (movingLeft == true & movingUp == false)
+            {
+                ChangeDirection(3);
+            }
 
             //moves the duck
             if (movingLeft == true)
@@ -92,6 +109,26 @@ namespace Duck_Hunt_1._1
         public void Kill()
         {
 
+        }
+
+        public void ChangeDirection(int direction)
+        {
+            if (direction == 0)
+            {
+                //duck.Fill = //duck facing NE
+            }
+            else if (direction == 1)
+            {
+                //duck.Fill = //duck facing NW
+            }
+            else if (direction == 2)
+            {
+                //duck.Fill = //duck facing SE
+            }
+            else if (direction == 3)
+            {
+                //duck.Fill = //duck facing SW
+            }
         }
     }
 }
