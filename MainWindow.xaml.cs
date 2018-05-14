@@ -36,10 +36,11 @@ namespace Duck_Hunt_1._1
             //start music
             //musicPlayer.Open(new Uri("tapperSong.mp3", UriKind.Relative));
             //musicPlayer.Play();
-            duck.Spawn();
-
-            Canvas.Children.Add(duck.duck);
+            duck.Spawn(Canvas);
             duck.Move(counter);
+            //BitmapImage bitmapImage = new BitmapImage(new Uri("Image1.png"));
+            //ImageBrush img = new ImageBrush(bitmapImage);
+            //Canvas.Background = img;
         }
 
         private void GameTimer_Tick(object sender, EventArgs e)
