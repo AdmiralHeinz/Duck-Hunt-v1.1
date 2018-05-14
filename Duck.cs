@@ -24,14 +24,14 @@ namespace Duck_Hunt_1._1
     {
         public Rectangle duck;
         Random random = new Random();
-        public int pos_x = 1;
-        public int pos_y = 1;
+        public int pos_x = 950/2;
+        public int pos_y = 599;
         public int counter = 0;
         public int speed;
         public bool movingLeft = true;
         public bool movingUp = true;
 
-        public void Spawn()
+        public void Spawn(Canvas canvas)
         {
             duck = new Rectangle();
             ///BitmapImage bitmapImage = new BitmapImage(new Uri());
@@ -40,8 +40,15 @@ namespace Duck_Hunt_1._1
             duck.Fill = Brushes.Aqua;
             duck.Height = 50;
             duck.Width = 50;
-            speed = random.Next(7, 15);
-        }
+            speed = random.Next(8, 15);
+            //assigns a starting direction
+            if (speed % 2 == 0){movingLeft = true;}
+            if (speed % 2 != 0){movingLeft = false;}
+            
+            canvas.Children.Add(duck);
+            pos_x = 950 / 2;
+            pos_y = 599;
+    }
 
         public void Move(int counter)
         {
@@ -89,12 +96,12 @@ namespace Duck_Hunt_1._1
                 pos_x = pos_x + speed;
                 Canvas.SetLeft(duck, pos_x);
             }
-            else
+            else if (movingLeft == false)
             {
                 pos_x = pos_x - speed;
                 Canvas.SetLeft(duck, pos_x);
             }
-            if (movingUp == true)
+            if (movingUp)
             {
                 pos_y = pos_y + speed;
                 Canvas.SetTop(duck, pos_y);
