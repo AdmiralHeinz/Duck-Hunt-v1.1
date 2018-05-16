@@ -21,6 +21,7 @@ namespace Duck_Hunt_1._1
     public partial class MainWindow : Window
     {
         Duck duck = new Duck();
+        Player player = new Player();
         MediaPlayer musicPlayer = new MediaPlayer();
 
         System.Windows.Threading.DispatcherTimer gameTimer = new System.Windows.Threading.DispatcherTimer();
@@ -45,6 +46,13 @@ namespace Duck_Hunt_1._1
 
         private void GameTimer_Tick(object sender, EventArgs e)
         {
+            if (player.MouseClicked())
+            {
+                this.Title = Mouse.GetPosition(this).ToString();
+                Console.WriteLine(Mouse.GetPosition(this).ToString());
+
+            }
+            else { this.Title = "no click"; }
             counter++;
             //this.Title = counter.ToString();
             duck.Move(counter);
