@@ -31,6 +31,7 @@ namespace Duck_Hunt_1._1
         {
             InitializeComponent();
 
+            Background background = new Background(Canvas);
             gameTimer.Tick += GameTimer_Tick;
             gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
             gameTimer.Start();
