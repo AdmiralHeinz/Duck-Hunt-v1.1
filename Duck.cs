@@ -111,12 +111,35 @@ namespace Duck_Hunt_1._1
                     pos_y = pos_y - speed;
                     Canvas.SetTop(duck, pos_y);
                 }
+                RandomChangeDirection();    
             }
 
             public void Kill(Canvas canvas)
             {
                 canvas.Children.Remove(duck);
             }
+                
+            public void RandomChangeDirection()
+        {
+            int change = random.Next(0, 300); //generates a random number
+            if (change >= 290)//1 in 10 chance to trigger the event
+            {
+                //defines a random direction based on whether the triggering number
+                if (change % 2 == 0)
+                {
+                    //changes the horizontal direction if even
+                    if (movingLeft) { movingLeft = false; }
+                    else { movingLeft = true; }
+                }
+                else
+                {
+                    //chnages the vertical direction if odd
+                    if (movingUp) { movingUp = false; }
+                    else { movingUp = true; }
+                }
+                //MessageBox.Show("Random Change!");
+            }
+        }    
 
             public void ChangeDirection(int direction)
             {
