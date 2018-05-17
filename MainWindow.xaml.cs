@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,48 +15,173 @@ using System.Windows.Shapes;
 
 namespace Duck_Hunt_1._1
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    class Duck
     {
-        Duck duck = new Duck();
-        Player player = new Player();
-        MediaPlayer musicPlayer = new MediaPlayer();
+        public Rectangle duck;
+        Random random = new Random();
+        public int pos_x = 950 / 2;
+        public int pos_y = 599;
+        public int counter = 0;
+        public int speed;
+        public bool movingLeft = true;
+        public bool movingUp = true;
+        public bool isDuck = false;
+        public int spawnCounter;
 
-        System.Windows.Threading.DispatcherTimer gameTimer = new System.Windows.Threading.DispatcherTimer();
-        int counter = 0;
-
-        public MainWindow()
+        public void Spawn(Canvas canvas)
         {
-            InitializeComponent();
+            if (isDuck == false)
+            {
+                duck = new Rectangle();
+                ///BitmapImage bitmapImage = new BitmapImage(new Uri());
+                ///ImageBrush img = new ImageBrush(bitmapImage);
+                ///duck.Fill = img;
+                duck.Fill = Brushes.Aqua;
+                duck.Height = 50;
+                duck.Width = 50;
+                //asigns a random speed
+                speed = random.Next(8, 15);
+                //assigns a starting direction
+                if (speed % 2 == 0) { movingLeft = true; }
+                if (speed % 2 != 0) { movingLeft = false; }
 
-            Background background = new Background(Canvas);
-            gameTimer.Tick += GameTimer_Tick;
-            gameTimer.Interval = new TimeSpan(0, 0, 0, 0, 1000 / 60);//fps
-            gameTimer.Start();
-            //start music
-            //musicPlayer.Open(new Uri("tapperSong.mp3", UriKind.Relative));
-            //musicPlayer.Play();
-            duck.Spawn(Canvas);
-            duck.Move(counter);
-            //BitmapImage bitmapImage = new BitmapImage(new Uri("Image1.png"));
-            //ImageBrush img = new ImageBrush(bitmapImage);
-            //Canvas.Background = img;
+                canvas.Children.Add(duck);
+                pos_x = 950 / 2;
+                pos_y = 599;
+                isDuck = true;
+            }
         }
 
-        private void GameTimer_Tick(object sender, EventArgs e)
+        public void Shoot (double Shot_x, double Shot_Y, Canvas canvas, int counter)
         {
-            if (player.MouseClicked())
+            if (Shot_x >= pos_x & Shot_x <= pos_x + 50)
             {
-                this.Title = Mouse.GetPosition(this).ToString();
-                Console.WriteLine(Mouse.GetPosition(this).ToString());
-
+                if(Shot_Y >= pos_y & Shot_Y <= pos_y + 50)
+                {
+                    Kill(canvas, counter);
+                }
             }
-            else { this.Title = "no click"; }
-            counter++;
-            //this.Title = counter.ToString();
-            duck.Move(counter);
+        }
+
+        public void Move(int counter)
+        {
+            //moves it per tick
+            /*Canvas.SetLeft(duck, pos_x + counter*speed);
+            Canvas.SetTop(duck, pos_y + counter*speed);*/
+            //checks if it has hit an edge and defines a new direction if it has
+            if (pos_x <= 1)
+            {
+                movingLeft = true;
+            }
+            else if (pos_x >= 949)
+            {
+                movingLeft = false;
+            }
+            if (pos_y <= 1)
+            {
+                movingUp = true;
+            }
+            else if (pos_y >= 599)
+            {
+                movingUp = false;
+            }
+            //sends a change direction command
+            if (movingLeft == false & movingUp == true)
+            {
+                ChangeDirection(0);
+            }
+            else if (movingLeft == true & movingUp == true)
+            {
+                ChangeDirection(1);
+            }
+            else if (movingLeft == false & movingUp == false)
+            {
+                ChangeDirection(2);
+            }
+            else if (movingLeft == true & movingUp == false)
+            {
+                ChangeDirection(3);
+            }
+
+            //moves the duck
+            if (movingLeft == true)
+            {
+                pos_x = pos_x + speed;
+                Canvas.SetLeft(duck, pos_x);
+            }
+            else if (movingLeft == false)
+            {
+                pos_x = pos_x - speed;
+                Canvas.SetLeft(duck, pos_x);
+            }
+            if (movingUp)
+            {
+                pos_y = pos_y + speed;
+                Canvas.SetTop(duck, pos_y);
+            }
+            else
+            {
+                pos_y = pos_y - speed;
+                Canvas.SetTop(duck, pos_y);
+            }
+            RandomChangeDirection();
+        }
+
+        public void Kill(Canvas canvas, int counter)
+        {
+            canvas.Children.Remove(duck);
+            isDuck = false;
+            spawnCounter = counter;
+        }
+
+        public void SpawnTimer(int counter, Canvas canvas)
+        {
+            if (counter == spawnCounter + 6)
+            {
+                Spawn(canvas);
+            }
+        }
+
+        public void RandomChangeDirection()
+        {
+            int change = random.Next(0, 500); //generates a random number
+            if (change >= 495)//1 in x chance to trigger the event
+            {
+                //defines a random direction based on whether the triggering number
+                if (change % 2 == 0)
+                {
+                    //changes the horizontal direction if even
+                    if (movingLeft) { movingLeft = false; }
+                    else { movingLeft = true; }
+                }
+                else
+                {
+                    //chnages the vertical direction if odd
+                    if (movingUp) { movingUp = false; }
+                    else { movingUp = true; }
+                }
+                //MessageBox.Show("Random Change!");
+            }
+        }
+
+        public void ChangeDirection(int direction)
+        {
+            if (direction == 0)
+            {
+                //duck.Fill = //duck facing NE
+            }
+            else if (direction == 1)
+            {
+                //duck.Fill = //duck facing NW
+            }
+            else if (direction == 2)
+            {
+                //duck.Fill = //duck facing SE
+            }
+            else if (direction == 3)
+            {
+                //duck.Fill = //duck facing SW
+            }
         }
     }
 }
